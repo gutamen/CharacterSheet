@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Equipment from './pages/Equipament';
 
 //data will be the string we send from our server
 const apiCall = () => {
@@ -57,17 +58,151 @@ function Home(){
 function General(){
     return(
         <h2> &nbsp; &nbsp; Geral
+            <div style={{
+                display: 'flex',
+                fontWeight: 'normal',
+                fontSize: '11px',
+                margin: '3% 3% 0 3%',
+                flexWrap: 'wrap',
+                gap: '16px',
+                justifyContent: 'space-around'
+            }}> 
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'150px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Nome do personagem
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'250px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Classe e Nível
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'70px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Raça
+                    </div>
+                </div>               
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'100px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Tendência
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'120px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Divindade
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'40px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Tamanho
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'40px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Idade
+                    </div>
+                </div>               
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'25px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Sexo
+                    </div>
+                </div>               
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'40px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Altura
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'32px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Peso
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'60px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Olhos
+                    </div>
+                </div>
+                
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'60px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Cabelos
+                    </div>
+                </div>
+
+                <div style={{textAlign: 'left'}}>
+                    <GeralAtributesText width={'40px'}/>
+                    <div style={{
+                        fontSize: '11px',
+                        marginTop: '0px'
+                    }}>
+                        Pele
+                    </div>
+                </div>
+
+            </div> 
             <Stats sheet={sheetGlobal} />
         </h2>
     );
 }
 
-function Equipment(){
-    return(
-        <h2>Equipamento
-        </h2>
-    );
-}
 
 function Skills(){
     return(
@@ -148,6 +283,9 @@ function Stats({sheet}){
                         backgroundColor: 'grey',
                         
                     }}> {sheet.strength} </button>
+                    <br/>
+                    <textarea className='statModifierText' readOnly value={'+0'} rows={'1'}> </textarea>
+                    
                 </div>
 
                 <div style={{textAlign: 'center'}}>Destreza
@@ -163,6 +301,9 @@ function Stats({sheet}){
                         backgroundColor: 'grey',
                         
                     }}> {sheet.dexterity} </button>
+                    <br/>
+                    <textarea className='statModifierText' readOnly value={'+0'} rows={'1'}> </textarea>
+
                 </div>
 
                 <div style={{textAlign: 'center'}}>Consituição
@@ -178,6 +319,9 @@ function Stats({sheet}){
                         backgroundColor: 'grey',
                         
                     }}> {sheet.constituition} </button>
+                    <br/>
+                    <textarea className='statModifierText' readOnly value={'+0'} rows={'1'}> </textarea>
+
                 </div>
 
                 <div style={{textAlign: 'center'}}>Inteligência
@@ -192,7 +336,10 @@ function Stats({sheet}){
                     color: 'white',
                     backgroundColor: 'grey',
                     
-                }}> {sheet.intelligence} </button>
+                    }}> {sheet.intelligence} </button>
+                    <br/>
+                    <textarea className='statModifierText' readOnly value={'+0'} rows={'1'}> </textarea>
+
                 </div>
 
                 <div style={{textAlign: 'center'}}>Sabedoria
@@ -208,6 +355,9 @@ function Stats({sheet}){
                         backgroundColor: 'grey',
                         
                     }}> {sheet.wisdom} </button>
+                    <br/>
+                    <textarea className='statModifierText' readOnly value={'+0'} rows={'1'}> </textarea>
+
                 </div>
 
                 <div style={{textAlign: 'center'}}>Carisma
@@ -223,10 +373,20 @@ function Stats({sheet}){
                         backgroundColor: 'grey',
                         
                     }}> {sheet.charisma} </button>
+                    <br/>
+                    <textarea className='statModifierText' readOnly value={'+0'} rows={'1'}> </textarea>
+
                 </div>
 
         </div>
         
+    );
+}
+
+function GeralAtributesText({width}){
+    return(
+        <textarea className='geralAtributesText' style={{width: width}} rows={'1'}>
+        </textarea>
     );
 }
 
