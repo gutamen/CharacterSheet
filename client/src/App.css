@@ -6,6 +6,18 @@
     height: 50px;
 }
 
+.statValueButton{
+    padding: 34px 34px;
+    margin-top: 10px;
+    border-radius: 60%;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "Comic Sans MS", cursive;
+    color: white;
+    background-color: grey;
+
+}
+
 .statModifierText{
     border: none;
     text-align: center;
