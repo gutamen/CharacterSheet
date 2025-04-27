@@ -4,7 +4,7 @@ function Home({sheet, sheetState}){
     return( 
         <h2>Início 
             <center>
-                <MenuButton buttonText='Criar Personagem' />
+                <MenuButton buttonText='Criar Personagem' onClick={() => HandleCreateSheet(sheet, sheetState)}/>
                 <br />
                 <MenuButton buttonText='Carregar Personagem' onClick={() => HandleLoadSheet(sheet, sheetState)}/>
             </center>
@@ -29,6 +29,14 @@ function HandleLoadSheet(sheet, sheetState){
     sheetState('loaded');
     console.log(sheet);
     sheet.isLoaded = !sheet.isLoaded;
+}
+
+function HandleCreateSheet(sheet, sheetState){
+    if(!(sheet instanceof Sheet)){
+        console.error('Tipo não esperado');
+        return;
+    }
+
 }
 
 export default Home;

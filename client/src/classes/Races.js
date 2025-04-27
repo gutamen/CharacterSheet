@@ -1,6 +1,6 @@
-class Race{
+class Races{
     constructor(race){
-        this.raceName = race;
+        this.race = race;
 
         this.size = null;
         this.displacement = null;
@@ -26,7 +26,7 @@ class Race{
         this.intelligence = 0;
         this.wisdom = 0;
         this.charisma = 0;
-
+        this.skills = [];
         this.traits = null;
 
 
@@ -78,6 +78,8 @@ class Race{
                     '+2 de Bônus racial nos testes de Ouvir, Procurar e Observar. Um elfo que passar a 1,5 metro de uma porta secreta ou escondida pode realizar um teste deProcurar como se estivesse procurando ativamente.'
                 ];
 
+                this.skills = [['listen', 2], ['search', 2], ['appraise', 2]]
+
             break;
 
             case 'dwarf':
@@ -108,7 +110,7 @@ class Race{
                     '+2 de bônus racial nos testes de Avaliação relacionados a objetos de metal ou pedra: os anões estão familiarizados com objetos valiosos de diversos tipos, especialmente de pedra e metal.',
                     '+2 de bônus racial nos testes de Ofícios relacionados a objetos de metal ou pedra: os anões são naturalmente eficientes para trabalhos com esses materiais.'
                 ]; 
-
+                
             break;
 
             case 'gnome':
@@ -140,11 +142,12 @@ class Race{
                     '+2 de bônus racial nos testes de Ofícios (alquimia).',
                     'Habilidades Similares à Magia: l/dia – falar com animais (somente mamíferos terrestres, 1 minuto de duração). Um gnomo com Carisma 10, no mínimo, também possui as seguintes habilidades similares à magia: l/dia – globos de luz, som fantasma, prestidigitação. Nível de conjurador: 1° nível; teste de resistência CD 10 + modificador de Carisma + nível da magia.'
                 ];
+                this.skills = [['listen', 2]]
             break;
 
             case 'halfling':
-                this.minHeight = 0,7;
-                this.maxHeight = 0,95;
+                this.minHeight = 0.7;
+                this.maxHeight = 0.95;
                 
                 this.strength = -2;
                 this.dexterity = 2;
@@ -162,17 +165,18 @@ class Race{
 
                 this.traits = [
                     '+1 de bônus de tamanho na Classe de Armadura, +1 de bônus de tamanho nas jogadas de ataque e +4 de bônus de tamanho nos testes de Esconder-se, mas precisam usar armas menores que os humanos e sua capacidade de levantar e carregar peso equivale a três quartos da carga máxima das criaturas Médias',
-                    '+2 de bônus racial nos testes de Escalar, Saltar e Furtividade: os halflings são ágeis, atléticos e estáveis.',
+                    '+2 de bônus racial nos testes de Escalar, Saltar e Furtividade.',
                     '+1 de bônus racial em todos os testes de resistência.',
                     '+2 de bônus de moral nos testes de resistência contra medo.',
                     '+1 de bônus racial nas jogadas de ataque com armas de arremesso e fundas.',
                     '+2 de bônus racial nos testes de Ouvir.'
                 ];
+                this.skills = [['listen', 2], ['climb', 2], ['jump', 2], ['stealth', 2]]
             break;
 
             case 'halforc':
                 this.minHeight = 1.8;
-                this.maxHeight = 2,1;
+                this.maxHeight = 2.1;
                 
                 this.strength = 2;
                 this.intelligence = -2;
@@ -218,13 +222,15 @@ class Race{
                     '+2 de bônus racial nos testes de Diplomacia e Obter Informação.',
                     'Sangue Élfico: Para todas as habilidades especiais e efeitos, um meio-elfo é considerado um elfo.'
                 ];
+
+                this.skills = [['listen', 1], ['search', 1], ['appraise', 1], ['diplomacy', 2], ['gather information', 2]]
             break;
 
             default:
-            console.error('raça não existe');
+                console.error('raça "' + race + '" não existe');
         }
 
     }
 }
 
-export default Race;
+export default Races;
