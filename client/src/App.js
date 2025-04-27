@@ -38,7 +38,7 @@ function App() {
                 
             </div>
             <Routes>
-                <Route path="/" element={<Home sheet={sheetGlobal} sheetState={loadSheet}/>} />
+                <Route path="/" element={<Home sheet={sheetGlobal} sheetStateChange={loadSheet} sheetState={sheetState}/>} />
                 <Route path="/general" element={<General sheet={sheetGlobal}/>} />
                 <Route path="/equipment" element={<Equipment />} />
                 <Route path="/skills" element={<Skills />} />
