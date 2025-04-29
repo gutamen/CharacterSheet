@@ -1,15 +1,19 @@
 import { useState } from 'react';
 
-function Spinner() {
+function Spinner({valueList}) {
 
-    const [value, setValue] = useState(1);
+    const [value, setValue] = useState(10);
 
     const inc = () => {
-        setValue(prev => Math.min(prev + 1, 20)); // máximo 20
+        let next = Math.min(value + 1, 20);
+        setValue(next); // máximo 20
+        valueList[0] = next;
     };
 
     const dec = () => {
-        setValue(prev => Math.max(prev - 1, 1)); // mínimo 1
+        let next = Math.max(value - 1, 1);
+        setValue(next); // mínimo 1
+        valueList[0] = next;
     };
     
     const buttonStyle = {
