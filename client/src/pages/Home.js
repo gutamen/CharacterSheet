@@ -1,5 +1,6 @@
 import Sheet from "../classes/Sheet";
 import Spinner from "../objects/Spinner"
+import Races from "../classes/Races";
 
 function Home({sheet, sheetStateChange, sheetState}){
 
@@ -27,6 +28,10 @@ function MenuButton({buttonText, onClick, yDistance = '10%'}){
 }
 
 function CreateSheetModalPopup({sheet, state, changeState}){
+    let selectedRace = 'human';
+    let raceTraits = new Races('elf');
+    let raceText = raceTextGenerator(raceTraits);
+    
     function AtributeSpinner({atribute, atributeValueList}){
         return(
             <div style={{display: 'flex', gap: '10px', fontWeight: 'normal'}}>
@@ -76,7 +81,21 @@ function CreateSheetModalPopup({sheet, state, changeState}){
                     <div>
                         <h1 style={{fontWeight: 'normal', fontSize: '32px'}}>Selecione a Raça</h1>
                         <div style={{display: 'block', gap: '10px'}}>
-                            
+                            <select id='selectedRace' onChange={selectRaceOnChange} style={{width: '100px', textAlign: 'center'}}>
+                                <option value='human'> Humano</option>
+                                <option value='elf'> Elfo</option>
+                                <option value='halforc'> Meio-Orc</option>
+                                <option value='halfelf'> Meio-Elfo</option>
+                                <option value='halfling'> Halfling</option>
+                                <option value='dwarf'> Anão</option>
+                                <option value='gnome'> Gnomo</option>
+                            </select>
+                            <br/>
+                            <textarea style={{
+                                border: 'none',
+                                resize: 'none',
+                                textAlign: 'center'
+                            } }/>
                         </div>
                     </div>
                 ))}
@@ -111,6 +130,46 @@ function CreateSheetModalPopup({sheet, state, changeState}){
                 break;
 
         }
+    }
+
+    function selectRaceOnChange(event){
+        selectedRace = event.target.value;
+        console.log(raceText);
+    }
+
+    //Função sensível a linguagem
+    function raceTextGenerator(race){
+        if(!(race instanceof Races)){
+            console.error('Esperado classe <Races>');
+            return null;
+        }
+
+        let ret = 'Tamanho da raça: ' + race.size + '\n';
+    
+        ret += 'Dislocamento: ' + race.displacement + ' Metros\n';
+
+        ret += 'Alutura: entre ' + race.minHeight.toFixed(2) + ' e ' + race.maxHeight.toFixed(2) + '\n';
+
+        ret += 'Peso: entre ' + race.minWeight.toString() + ' KG e ' + race.maxWeight.toString() + ' KG\n';
+
+        ret += 'Idade máxima: ' + race.maxAge.toString() + '\n';
+
+        let languages = [];
+
+        for(let i = 0; i < race.languages.length; i++){
+            if(race.languages[i] === 'common') languages.push(' Linguagem Comum');
+            if(race.languages[i] === 'elf') languages.push(' Linguagem Élfica');
+            if(race.languages[i] === 'dwarf') languages.push(' Linguagem Anã');
+            if(race.languages[i] === 'gnome') languages.push(' Linguagem dos Gnomos');
+            if(race.languages[i] === 'halfling') languages.push(' Linguagem dos Halflings');
+            if(race.languages[i] === 'orc') languages.push(' Linguagem Orc');
+        }
+    
+        ret += 'Línguas conhecidas:' + languages;
+
+        
+        
+        return ret;
     }
 
 }

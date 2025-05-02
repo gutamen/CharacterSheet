@@ -26,7 +26,7 @@ class Races{
         this.intelligence = 0;
         this.wisdom = 0;
         this.charisma = 0;
-        this.skills = [];
+        this.skills = null;
         this.traits = null;
 
 
