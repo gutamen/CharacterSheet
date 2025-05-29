@@ -1,24 +1,149 @@
-import Sheet from "./Sheet";
+import Translator from "../objects/Translator";
+
+let baseAttacks = 
+    [   
+        [
+            // Bônus de ataque bom
+            [1, [1]],
+            [2, [2]],
+            [3, [3]],
+            [4, [4]],
+            [5, [5]],
+            [6, [6,1]],
+            [7, [7,2]],
+            [8, [8,3]],
+            [9, [9,4]],
+            [10, [10,5]],
+            [11, [11,6,1]],
+            [12, [12,7,2]],
+            [13, [13,8,3]],
+            [14, [14,9,4]],
+            [15, [15,10,5]],
+            [16, [16,11,6,1]],
+            [17, [17,12,7,2]],
+            [18, [18,13,8,3]],
+            [19, [19,14,9,4]],
+            [20, [20,15,10,5]],                    
+            'good'
+        ],
+        [
+            // Bônus de ataque médio
+            [1, [0]],
+            [2, [1]],
+            [3, [2]],
+            [4, [3]],
+            [5, [3]],
+            [6, [4]],
+            [7, [5]],
+            [8, [6,1]],
+            [9, [6,1]],
+            [10, [7,2]],
+            [11, [8,3]],
+            [12, [9,4]],
+            [13, [9,4]],
+            [14, [10,5]],
+            [15, [11,6,1]],
+            [16, [12,7,2]],
+            [17, [12,7,2]],
+            [18, [13,8,3]],
+            [19, [14,9,4]],
+            [20, [15,10,5]],                    
+            'medium'
+        ],
+        [
+            // Bônus de atque ruim
+            [1, [0]],
+            [2, [1]],
+            [3, [1]],
+            [4, [2]],
+            [5, [2]],
+            [6, [3]],
+            [7, [3]],
+            [8, [4]],
+            [9, [4]],
+            [10, [5]],
+            [11, [5]],
+            [12, [6,1]],
+            [13, [6,1]],
+            [14, [7,2]],
+            [15, [7,2]],
+            [16, [8,3]],
+            [17, [8,3]],
+            [18, [9,4]],
+            [19, [9,4]],
+            [20, [10,5]],
+            'bad'
+        ]
+    ];
+
+let resistanceBonus = 
+    [
+        [
+            // Bônus de resistência bom
+            [1, 2],
+            [2, 3],
+            [3, 3],
+            [4, 4],
+            [5, 4],
+            [6, 5],
+            [7, 5],
+            [8, 6],
+            [9, 6],
+            [10, 7],
+            [11, 7],
+            [12, 8],
+            [13, 8],
+            [14, 9],
+            [15, 9],
+            [16, 10],
+            [17, 10],
+            [18, 11],
+            [19, 11],
+            [20, 12],
+            'good'
+        ],
+        [
+            // Bônus de resistência ruim
+            [1, 0],
+            [2, 0],
+            [3, 1],
+            [4, 1],
+            [5, 1],
+            [6, 2],
+            [7, 2],
+            [8, 2],
+            [9, 3],
+            [10, 3],
+            [11, 3],
+            [12, 4],
+            [13, 4],
+            [14, 4],
+            [15, 5],
+            [16, 5],
+            [17, 5],
+            [18, 6],
+            [19, 6],
+            [20, 6],
+            'bad'
+        ]
+    ];
 
 class Classes{
+    
+    constructor(className) {
+        
 
-    constructor(className, sheet) {
-        if(!(sheet instanceof Sheet)){
-            console.error('Deve receber instância da classe <Sheet>');
-            return;
-        }
         this.class = className;
         this.lifeDice = 0;
         this.alignments = [['good', 'neutral', 'evil'], ['law', 'neutral', 'chaotic']];
         this.skills = [];
-        this.initialSkillPoints = 0;
-        this.skillPointsPerLevel = 0;
+        this.skillPointMultiplicator = 0;
         this.classSkills = [];
         this.baseAttack = [];
         this.fortitude = [];
         this.reflex = [];
         this.will = [];
-        this.level = 1;
+//        this.level = 1;
         this.weapons = [];
         this.armor = [];
         this.godhood = null;
@@ -28,8 +153,7 @@ class Classes{
                 this.lifeDice = 12;
                 this.alignments[1] = ['neutral', 'chaotic'];
                 this.skills = [['handle animal', 0], ['ride', 0], ['climb', 0], ['intimidate', 0], ['swim', 0], ['listen', 0], ['jump', 0], ['survival', 0]];
-                this.initialSkillPoints = sheet.intelligence[1] * 4;
-                this.skillPointsPerLevel = 4 + sheet.intelligence[1];
+                this.skillPointMultiplicator = 4;
                 this.weapons = ['simple', 'common'];
                 this.armor = ['light', 'medium', 'shield'];
                  
@@ -76,101 +200,19 @@ class Classes{
                     ]]
                 ];
 
-                this.fortitude = [
-                    [1, 2],
-                    [2, 3],
-                    [3, 3],
-                    [4, 4],
-                    [5, 4],
-                    [6, 5],
-                    [7, 5],
-                    [8, 6],
-                    [9, 6],
-                    [10, 7],
-                    [11, 7],
-                    [12, 8],
-                    [13, 8],
-                    [14, 9],
-                    [15, 9],
-                    [16, 10],
-                    [17, 10],
-                    [18, 11],
-                    [19, 11],
-                    [20, 12]                    
-                ];
+                this.fortitude = resistanceBonus[0];
 
-                this.reflex = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.reflex = resistanceBonus[1];
 
-                this.will = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.will = resistanceBonus[1];
 
-                this.baseAttack = [
-                    [1, [1]],
-                    [2, [2]],
-                    [3, [3]],
-                    [4, [4]],
-                    [5, [5]],
-                    [6, [6,1]],
-                    [7, [7,2]],
-                    [8, [8,3]],
-                    [9, [9,4]],
-                    [10, [10,5]],
-                    [11, [11,6,1]],
-                    [12, [12,7,2]],
-                    [13, [13,8,3]],
-                    [14, [14,9,4]],
-                    [15, [15,10,5]],
-                    [16, [16,11,6,1]],
-                    [17, [17,12,7,2]],
-                    [18, [18,13,8,3]],
-                    [19, [19,14,9,4]],
-                    [20, [20,15,10,5]]                    
-                ];
+                this.baseAttack = baseAttacks[0];
 
             break;
 
             case 'bard':
+                this.skillPointMultiplicator = 6;
+                
                 this.classSkills = [
                     [1,],
                     [2,],
@@ -193,115 +235,29 @@ class Classes{
                     [19,],
                     [20,]                    
                 ];
+                
+                this.baseAttack = baseAttacks[1];
 
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
+                this.fortitude = resistanceBonus[1];
 
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
+                this.reflex = resistanceBonus[0];
 
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
+                this.will = resistanceBonus[0];
 
             break;
 
             case 'cleric':
                 this.lifeDice = 8;
                 
-                this.skills = [['concentration', 0], ['knowledge', 0, 'arcane'], ['knowledge', 0, 'history'], ['knowledge', 0, 'plains'], ['knowledge', 0, 'religion'], ['heal', 0], ['diplomacy', 0], ['read magic', 0]];
+                this.skills = [['concentration', 0], ['knowledge', 0, 'arcana'], ['knowledge', 0, 'history'], ['knowledge', 0, 'planes'], ['knowledge', 0, 'religion'], ['heal', 0], ['diplomacy', 0], ['spellcraft', 0]];
                 // falta oficios e profissões
                 // arrumar talento em caso de domínio de guerra
                 // se clérigo adicionar linguagem celestial
 
-                this.initialSkillPoints = sheet.intelligence[1] + 2;
-                this.skillPointsPerLevel = 2 + sheet.intelligence[1];
+                this.skillPointMultiplicator = 2;
                 this.weapons = ['simple'];
                 this.armor = ['light', 'medium', 'heavy', 'shield'];
-
+ 
                 this.classSkills = [
                     [1, [
                         'Aura (Ext): Um clérigo de uma divindade Caótica, Maligna, Boa ou Leal tem uma aura particularmente poderosa correspondente à tendência de sua divindade.',
@@ -328,102 +284,19 @@ class Classes{
                     [20,]                    
                 ];
 
-                this.fortitude = [
-                    [1, 2],
-                    [2, 3],
-                    [3, 3],
-                    [4, 4],
-                    [5, 4],
-                    [6, 5],
-                    [7, 5],
-                    [8, 6],
-                    [9, 6],
-                    [10, 7],
-                    [11, 7],
-                    [12, 8],
-                    [13, 8],
-                    [14, 9],
-                    [15, 9],
-                    [16, 10],
-                    [17, 10],
-                    [18, 11],
-                    [19, 11],
-                    [20, 12]                    
-                ];
+                this.fortitude = resistanceBonus[0];
 
-                this.reflex = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.reflex = resistanceBonus[1];
 
-                this.will = [
-                    [1, 2],
-                    [2, 3],
-                    [3, 3],
-                    [4, 4],
-                    [5, 4],
-                    [6, 5],
-                    [7, 5],
-                    [8, 6],
-                    [9, 6],
-                    [10, 7],
-                    [11, 7],
-                    [12, 8],
-                    [13, 8],
-                    [14, 9],
-                    [15, 9],
-                    [16, 10],
-                    [17, 10],
-                    [18, 11],
-                    [19, 11],
-                    [20, 12]                    
-                ];
+                this.will = resistanceBonus[0]; 
 
-                this.baseAttack = [
-                    [1, [0]],
-                    [2, [1]],
-                    [3, [2]],
-                    [4, [3]],
-                    [5, [3]],
-                    [6, [4]],
-                    [7, [5]],
-                    [8, [6,1]],
-                    [9, [6,1]],
-                    [10, [7,2]],
-                    [11, [8,3]],
-                    [12, [9,4]],
-                    [13, [9,4]],
-                    [14, [10,5]],
-                    [15, [11,6,1]],
-                    [16, [12,7,2]],
-                    [17, [12,7,2]],
-                    [18, [13,8,3]],
-                    [19, [14,9,4]],
-                    [20, [15,10,5]]                    
-                ];
+                this.baseAttack = baseAttacks[1];
 
-
-            break;
+           break;
 
             case 'druid':
+                this.skillPointMultiplicator = 4;
+ 
                 this.classSkills = [
                     [1,],
                     [2,],
@@ -447,102 +320,11 @@ class Classes{
                     [20,]                    
                 ];
                 
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-
             break;
 
             case 'sorcerer':
+                this.skillPointMultiplicator = 2;
+ 
                 this.classSkills = [
                     [1,],
                     [2,],
@@ -566,100 +348,7 @@ class Classes{
                     [20,]                    
                 ];
 
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-
-            break;
+                break;
 
             case 'fighter':
                 this.lifeDice = 10;
@@ -667,8 +356,7 @@ class Classes{
                 this.skills = [['handle animal', 0], ['ride', 0], ['climb', 0], ['intimidate', 0], ['swim', 0], ['jump', 0]];
                 // falta oficios
                 
-                this.initialSkillPoints = (sheet.intelligence[1] + 2) * 4;
-                this.skillPointsPerLevel = 2 + sheet.intelligence[1];
+                this.skillPointMultiplicator = 2;
                 this.weapons = ['simple', 'common'];
                 this.armor = ['light', 'medium', 'heavy', 'shield', 'body shield'];
 
@@ -717,110 +405,26 @@ class Classes{
                     ]]                    
                 ];
 
-                this.fortitude = [
-                    [1, 2],
-                    [2, 3],
-                    [3, 3],
-                    [4, 4],
-                    [5, 4],
-                    [6, 5],
-                    [7, 5],
-                    [8, 6],
-                    [9, 6],
-                    [10, 7],
-                    [11, 7],
-                    [12, 8],
-                    [13, 8],
-                    [14, 9],
-                    [15, 9],
-                    [16, 10],
-                    [17, 10],
-                    [18, 11],
-                    [19, 11],
-                    [20, 12]                    
-                ];
+                this.fortitude = resistanceBonus[0];
 
-                this.reflex = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.reflex = resistanceBonus[1];
 
-                 this.will = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.will = resistanceBonus[1];
 
-                this.baseAttack = [
-                    [1, [1]],
-                    [2, [2]],
-                    [3, [3]],
-                    [4, [4]],
-                    [5, [5]],
-                    [6, [6,1]],
-                    [7, [7,2]],
-                    [8, [8,3]],
-                    [9, [9,4]],
-                    [10, [10,5]],
-                    [11, [11,6,1]],
-                    [12, [12,7,2]],
-                    [13, [13,8,3]],
-                    [14, [14,9,4]],
-                    [15, [15,10,5]],
-                    [16, [16,11,6,1]],
-                    [17, [17,12,7,2]],
-                    [18, [18,13,8,3]],
-                    [19, [19,14,9,4]],
-                    [20, [20,15,10,5]]                    
-                ];
+                this.baseAttack = baseAttacks[0];
 
             break;
 
             case 'rogue':
                 this.lifeDice = 6;
 
-                this.skills = [['open lock', 0], ['acrobacy', 0], ['escape artist', 0], ['perform', 0], ['apraise', 0], ['bluff', 0], ['knowledge', 0, 'location'], ['decipher script', 0], ['diplomacy', 0], ['disguise', 0], ['balance', 0], ['climb', 0], ['hide', 0], ['forgery', 0], ['intimidate', 0], ['swim', 0], ['gather information', 0], ['spot', 0], ['stealth', 0], ['listen', 0], ['search', 0], ['jump', 0], ['sense motive', 0], ['use rope', 0], ['use magic device', 0], ['operate mekanism', 0], ['sleight of hand', 0]];
+                this.skills = [['open lock', 0], ['tumble', 0], ['escape artist', 0], ['perform', 0], ['appraise', 0], ['bluff', 0], ['knowledge', 0, 'local'], ['decipher script', 0], ['diplomacy', 0], ['disguise', 0], ['balance', 0], ['climb', 0], ['hide', 0], ['forgery', 0], ['intimidate', 0], ['swim', 0], ['gather information', 0], ['spot', 0], ['move silently', 0], ['listen', 0], ['search', 0], ['jump', 0], ['sense motive', 0], ['use rope', 0], ['use magic device', 0], ['disable device', 0], ['sleight of hand', 0]];
                 // falta oficios e profissões
                 
-                this.initialSkillPoints = (sheet.intelligence[1] + 8) * 4;
-                this.skillPointsPerLevel = 8 + sheet.intelligence[1];
+                this.skillPointMultiplicator = 8;
                 this.weapons = ['simple'];
                 this.armor = ['light'];
+
                 this.classSkills = [
                     [1, [
                         'Ataque Furtivo: Se um ladino puder atingir um oponente incapaz de se defender adequadamente de seu ataque, ele será capaz de golpear um ponto vital e causar mais dano.',
@@ -864,102 +468,19 @@ class Classes{
                     [20,]                    
                 ];
 
-                this.will = [
-                    [1, 2],
-                    [2, 3],
-                    [3, 3],
-                    [4, 4],
-                    [5, 4],
-                    [6, 5],
-                    [7, 5],
-                    [8, 6],
-                    [9, 6],
-                    [10, 7],
-                    [11, 7],
-                    [12, 8],
-                    [13, 8],
-                    [14, 9],
-                    [15, 9],
-                    [16, 10],
-                    [17, 10],
-                    [18, 11],
-                    [19, 11],
-                    [20, 12]                    
-                ];
+                this.will = resistanceBonus[0];
 
-                this.reflex = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.reflex = resistanceBonus[1]; 
 
-                 this.fortitude = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
+                this.fortitude = resistanceBonus[1]; 
 
-                this.baseAttack = [
-                    [1, [0]],
-                    [2, [1]],
-                    [3, [1]],
-                    [4, [2]],
-                    [5, [2]],
-                    [6, [3]],
-                    [7, [3]],
-                    [8, [4]],
-                    [9, [4]],
-                    [10, [5]],
-                    [11, [5]],
-                    [12, [6,1]],
-                    [13, [6,1]],
-                    [14, [7,2]],
-                    [15, [7,2]],
-                    [16, [8,3]],
-                    [17, [8,3]],
-                    [18, [9,4]],
-                    [19, [9,4]],
-                    [20, [10,5]]                     
-                ];
-
+                this.baseAttack = baseAttacks[2];
 
             break;
 
             case 'mage':
+                this.skillPointMultiplicator = 2;
+ 
                 this.classSkills = [
                     [1,],
                     [2,],
@@ -982,103 +503,12 @@ class Classes{
                     [19,],
                     [20,]                    
                 ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
 
             break;
 
             case 'monk':
+                this.skillPointMultiplicator = 4;
+                
                 this.classSkills = [
                     [1,],
                     [2,],
@@ -1101,111 +531,18 @@ class Classes{
                     [19,],
                     [20,]                    
                 ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
 
             break;
 
             case 'paladin':
                 this.lifeDice = 10;
-                this.alignments = [['law'], ['good']];
+                this.alignments = [['good'], ['law']];
 
-                this.skills = [['handle animal', 0], ['concentration', 0], ['ride', 0], ['knowledge', 0, 'noble'], ['knowledge', 0, 'religion'], ['heal', 0], ['diplomacy', 0], ['sense motive', 0]];
+                this.skills = [['handle animal', 0], ['concentration', 0], ['ride', 0], ['knowledge', 0, 'nobility'], ['knowledge', 0, 'religion'], ['heal', 0], ['diplomacy', 0], ['sense motive', 0]];
                 // oficios e profissões não colocado
                 
-                this.initialSkillPoints = (2 * sheet.intelligence[1]) * 4;
-                this.skillPointsPerLevel = 2 + sheet.intelligence[1];
+                this.skillPointMultiplicator = 2;
+ 
                 this.weapons = ['simple', 'common'];
                 this.armor = ['light', 'medium', 'heavy', 'shield'];
                 this.classSkills = [
@@ -1248,101 +585,17 @@ class Classes{
                     [20,]                    
                 ];
 
-                this.fortitude = [
-                    [1, 2],
-                    [2, 3],
-                    [3, 3],
-                    [4, 4],
-                    [5, 4],
-                    [6, 5],
-                    [7, 5],
-                    [8, 6],
-                    [9, 6],
-                    [10, 7],
-                    [11, 7],
-                    [12, 8],
-                    [13, 8],
-                    [14, 9],
-                    [15, 9],
-                    [16, 10],
-                    [17, 10],
-                    [18, 11],
-                    [19, 11],
-                    [20, 12]                    
-                ];
-
-                this.reflex = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
-
-                 this.will = [
-                    [1, 0],
-                    [2, 0],
-                    [3, 1],
-                    [4, 1],
-                    [5, 1],
-                    [6, 2],
-                    [7, 2],
-                    [8, 2],
-                    [9, 3],
-                    [10, 3],
-                    [11, 3],
-                    [12, 4],
-                    [13, 4],
-                    [14, 4],
-                    [15, 5],
-                    [16, 5],
-                    [17, 5],
-                    [18, 6],
-                    [19, 6],
-                    [20, 6]                    
-                ];
-
-                this.baseAttack = [
-                    [1, [1]],
-                    [2, [2]],
-                    [3, [3]],
-                    [4, [4]],
-                    [5, [5]],
-                    [6, [6,1]],
-                    [7, [7,2]],
-                    [8, [8,3]],
-                    [9, [9,4]],
-                    [10, [10,5]],
-                    [11, [11,6,1]],
-                    [12, [12,7,2]],
-                    [13, [13,8,3]],
-                    [14, [14,9,4]],
-                    [15, [15,10,5]],
-                    [16, [16,11,6,1]],
-                    [17, [17,12,7,2]],
-                    [18, [18,13,8,3]],
-                    [19, [19,14,9,4]],
-                    [20, [20,15,10,5]]                    
-                ];
+                this.fortitude = resistanceBonus[0];
+                this.reflex = resistanceBonus[1];
+                this.will = resistanceBonus[1];
+                this.baseAttack = baseAttacks[0]; 
 
             break;
 
             case 'ranger':
+
+                this.skillPointMultiplicator = 4;
+ 
                 this.classSkills = [
                     [1,],
                     [2,],
@@ -1366,105 +619,81 @@ class Classes{
                     [20,]                    
                 ];
 
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
-
-                this.classSkills = [
-                    [1,],
-                    [2,],
-                    [3,],
-                    [4,],
-                    [5,],
-                    [6,],
-                    [7,],
-                    [8,],
-                    [9,],
-                    [10,],
-                    [11,],
-                    [12,],
-                    [13,],
-                    [14,],
-                    [15,],
-                    [16,],
-                    [17,],
-                    [18,],
-                    [19,],
-                    [20,]                    
-                ];
 
             break;
 
             default:
                 console.error('Classe "' + className + '" não existe.');
         }
+    }
 
+    //Função sensível a linguagem
+    classTextGenerator(){
+        let ret;
+
+        ret = 'Dado de vida : d' + this.lifeDice.toString() + '\n';
+        
+        let goodEvil = [];
+
+        for(let i = 0; i < this.alignments[0].length; i++){
+            if(this.alignments[0][i] === 'good')    goodEvil.push('Bom');
+            if(this.alignments[0][i] === 'neutral') goodEvil.push('Neutro');
+            if(this.alignments[0][i] === 'evil')    goodEvil.push('Mal');
+        }
+
+        let orderChaos = [];
+
+        for(let i = 0; i < this.alignments[1].length; i++){
+            if(this.alignments[1][i] === 'law')     orderChaos.push('Leal');
+            if(this.alignments[1][i] === 'neutral') orderChaos.push('Neutro');
+            if(this.alignments[1][i] === 'chaotic') orderChaos.push('Caótico');
+        }
+
+        ret += 'Alinhamentos possíveis: \n[' + orderChaos.join(', ') + '] \n[' + goodEvil.join(', ') + ']\n';
+        
+        ret += '\nPontos de perícia iniciais: ' + '\n' + '(' + this.skillPointMultiplicator.toString() + ' + modificador de Inteligência) * 4.\n';
+
+        ret += '\nPontos de perícia por nível: ' + '\n' +  this.skillPointMultiplicator.toString() + ' + modificador de Inteligência.\n';
+
+        ret += '\nBônus de ataque básico: ' + ((this.baseAttack[20] === 'good') ? 'Bom' : (this.baseAttack[20] === 'medium') ? 'Médio' : 'Ruim') + '\n';
+
+        ret += 'Fortitude: ' + ((this.fortitude[20] === 'good') ? 'Bom' : 'Ruim') + '\n';
+
+        ret += 'Reflexos: ' + ((this.reflex[20] === 'good') ? 'Bom' : 'Ruim') + '\n';
+
+        ret += 'Vontade: ' + ((this.will[20] === 'good') ? 'Bom' : 'Ruim') + '\n';
+
+        let usableWeapons = [];
+
+        for(let i = 0; i < this.weapons.length; i++) usableWeapons.push(Translator.weapons(this.weapons[i]));
+        
+        ret += '\nArmas Utilizáveis:\n' + usableWeapons.join(', ') + '\n';
+        
+        let usableArmor = [];
+
+        for(let i = 0; i < this.armor.length; i++) usableArmor.push(Translator.armors(this.armor[i]));
+
+        ret += '\nArmas Utilizáveis:\n' + usableArmor.join(', ') + '\n\n';
+
+        ret += 'Perícias da classe: \n';
+
+        for(let i = 0; i < this.skills.length; i++) ret += Translator.skills(this.skills[i]) + '\n';
+
+        ret += '\n'
+
+        ret += 'Habilidades de Classe:\n';
+
+        for(let i = 0; i < this.classSkills.length; i++){
+            if(this.classSkills[i][1]){
+                ret += 'Nível ' + this.classSkills[i][0].toString() + ':\n';
+                ret += this.classSkills[i][1].join('\n') + '\n\n';
+            }
+        }
+
+        return ret;
     }
 }
+
+
 
 export default Classes;

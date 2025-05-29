@@ -1,8 +1,17 @@
 import Sheet from "../classes/Sheet";
 import Spinner from "../objects/Spinner"
 import Races from "../classes/Races";
+import Classes from "../classes/Classes";
+import RaceText from "../objects/RaceText";
+import ClassText from "../objects/ClassText";
+import { useState } from 'react';
+
+let selectedRace = new Races('human');
+let selectedClass = new Classes('barbarian');
 
 function Home({sheet, sheetStateChange, sheetState}){
+    const [raceText, updateRaceText] = useState(selectedRace.raceTextGenerator());
+    const [classText, updateClassText] = useState(selectedClass.classTextGenerator());
 
     return( 
         <h2>Início 
@@ -11,7 +20,7 @@ function Home({sheet, sheetStateChange, sheetState}){
                 <br />
                 <MenuButton buttonText='Carregar Personagem' onClick={() => HandleLoadSheet(sheet, sheetStateChange)}/>
                 {(sheetState !== 'loaded' && sheetState !== 'emptyBuffer') && (
-                       <CreateSheetModalPopup sheet={sheet} state={sheetState} changeState={sheetStateChange}/> 
+                       <CreateSheetModalPopup sheet={sheet} state={sheetState} changeState={sheetStateChange} raceText={raceText} updateRaceText={updateRaceText} classText={classText} updateClassText={updateClassText}/> 
                 )} 
             </center>
         </h2>
@@ -27,10 +36,7 @@ function MenuButton({buttonText, onClick, yDistance = '10%'}){
     );
 }
 
-function CreateSheetModalPopup({sheet, state, changeState}){
-    let selectedRace = 'human';
-    let raceTraits = new Races('elf');
-    let raceText = raceTextGenerator(raceTraits);
+function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceText, classText, updateClassText}){
     
     function AtributeSpinner({atribute, atributeValueList}){
         return(
@@ -91,17 +97,49 @@ function CreateSheetModalPopup({sheet, state, changeState}){
                                 <option value='gnome'> Gnomo</option>
                             </select>
                             <br/>
-                            <textarea style={{
-                                border: 'none',
-                                resize: 'none',
-                                textAlign: 'center'
-                            } }/>
+                            <RaceText text={raceText} setText={updateRaceText} id={'raceText'}/>
+                       </div>
+                    </div>
+                ))}
+
+                { ((state === 'thirdCreation') && (sheet instanceof Sheet) && (
+                    <div>
+                        <h1 style={{fontWeight: 'normal', fontSize: '32px'}}>Selecione a Classe</h1>
+                        <div style={{display: 'block', gap: '10px'}}>
+                            <select id='selectedClass' onChange={selectClassOnChange} style={{width: '100px', textAlign: 'center'}}>
+                                <option value='barbarian'> Bárbaro</option>
+                                <option value='bard'> Bardo</option>
+                                <option value='cleric'> Clérigo</option>
+                                <option value='druid'> Druida</option>
+                                <option value='sorcerer'> Feiticeiro</option>
+                                <option value='fighter'> Guerreiro</option>
+                                <option value='rogue'> Ladino</option>
+                                <option value='mage'> Mago</option>
+                                <option value='monk'> Monge</option>
+                                <option value='paladin'> Paladino</option>
+                                <option value='ranger'> Ranger</option>
+                            </select>
+                            <br/>
+                            <ClassText text={classText} setText={updateClassText} />
+                       </div>
+                    </div>
+                ))}
+
+                { ((state === 'fourthCreation') && (sheet instanceof Sheet) && (
+                    <div>
+                        <h1 style={{fontWeight: 'normal', fontSize: '32px'}}>Características Básicas</h1>
+                        <textarea/>
+                        <textarea/>
+                        <div style={{display: 'block', gap: '10px'}}>
+
                         </div>
                     </div>
                 ))}
 
-                <button onClick={() => closeOnClick(state, changeState)}>{textCloseButton}</button> 
-                <button onClick={() => continueOnClick(state, changeState)}>Continuar</button>
+                <div style={{display: 'flex', gap:'20px', alignItems:'center', justifyContent:'center', paddingTop:'15px'}}>
+                    <button onClick={() => closeOnClick(state, changeState)}>{textCloseButton}</button> 
+                    <button onClick={() => continueOnClick(state, changeState)}>Continuar</button>
+                </div>
             </div>
         </div>
     );
@@ -113,6 +151,14 @@ function CreateSheetModalPopup({sheet, state, changeState}){
                 break;
 
             case 'secondCreation':
+                changeState('thirdCreation');
+                break;
+
+            case 'thirdCreation':
+                changeState('fourthCreation');
+                break;
+
+            case 'fourthCreation':
                 changeState('loaded');
                 break;
 
@@ -129,48 +175,26 @@ function CreateSheetModalPopup({sheet, state, changeState}){
                 changeState('firstCreation');
                 break;
 
+            case 'thirdCreation':
+                changeState('secondCreation');
+                break;
+
+            case 'fourthCreation':
+                changeState('thirdCreation');
+                break;
+
         }
     }
 
     function selectRaceOnChange(event){
-        selectedRace = event.target.value;
-        console.log(raceText);
+        selectedRace = new Races(event.target.value);
+        updateRaceText(selectedRace.raceTextGenerator());
     }
 
-    //Função sensível a linguagem
-    function raceTextGenerator(race){
-        if(!(race instanceof Races)){
-            console.error('Esperado classe <Races>');
-            return null;
-        }
-
-        let ret = 'Tamanho da raça: ' + race.size + '\n';
-    
-        ret += 'Dislocamento: ' + race.displacement + ' Metros\n';
-
-        ret += 'Alutura: entre ' + race.minHeight.toFixed(2) + ' e ' + race.maxHeight.toFixed(2) + '\n';
-
-        ret += 'Peso: entre ' + race.minWeight.toString() + ' KG e ' + race.maxWeight.toString() + ' KG\n';
-
-        ret += 'Idade máxima: ' + race.maxAge.toString() + '\n';
-
-        let languages = [];
-
-        for(let i = 0; i < race.languages.length; i++){
-            if(race.languages[i] === 'common') languages.push(' Linguagem Comum');
-            if(race.languages[i] === 'elf') languages.push(' Linguagem Élfica');
-            if(race.languages[i] === 'dwarf') languages.push(' Linguagem Anã');
-            if(race.languages[i] === 'gnome') languages.push(' Linguagem dos Gnomos');
-            if(race.languages[i] === 'halfling') languages.push(' Linguagem dos Halflings');
-            if(race.languages[i] === 'orc') languages.push(' Linguagem Orc');
-        }
-    
-        ret += 'Línguas conhecidas:' + languages;
-
-        
-        
-        return ret;
-    }
+    function selectClassOnChange(event){
+        selectedClass = new Classes(event.target.value);
+        updateClassText(selectedClass.classTextGenerator());
+    }    
 
 }
 
@@ -189,7 +213,6 @@ function HandleCreateSheet(sheet, state, changeState){
         return;
     }
     changeState('firstCreation');
-
 }
 
 export default Home;
