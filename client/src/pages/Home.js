@@ -1,10 +1,13 @@
 import Sheet from "../classes/Sheet";
-import Spinner from "../objects/Spinner"
+import Spinner from "../objects/Spinner";
+import SpinnerFloat from "../objects/SpinnerFloat";
 import Races from "../classes/Races";
 import Classes from "../classes/Classes";
 import RaceText from "../objects/RaceText";
 import ClassText from "../objects/ClassText";
+import Translator from "../objects/Translator";
 import { useState } from 'react';
+import Gods from "../classes/Gods";
 
 let selectedRace = new Races('human');
 let selectedClass = new Classes('barbarian');
@@ -13,6 +16,8 @@ function Home({sheet, sheetStateChange, sheetState}){
     const [raceText, updateRaceText] = useState(selectedRace.raceTextGenerator());
     const [classText, updateClassText] = useState(selectedClass.classTextGenerator());
 
+    const [godList, updateGodList] = useState([]);
+
     return( 
         <h2>Início 
             <center>
@@ -20,7 +25,7 @@ function Home({sheet, sheetStateChange, sheetState}){
                 <br />
                 <MenuButton buttonText='Carregar Personagem' onClick={() => HandleLoadSheet(sheet, sheetStateChange)}/>
                 {(sheetState !== 'loaded' && sheetState !== 'emptyBuffer') && (
-                       <CreateSheetModalPopup sheet={sheet} state={sheetState} changeState={sheetStateChange} raceText={raceText} updateRaceText={updateRaceText} classText={classText} updateClassText={updateClassText}/> 
+                       <CreateSheetModalPopup sheet={sheet} state={sheetState} changeState={sheetStateChange} raceText={raceText} updateRaceText={updateRaceText} classText={classText} updateClassText={updateClassText} godList={godList} updateGodList={updateGodList}/> 
                 )} 
             </center>
         </h2>
@@ -36,7 +41,7 @@ function MenuButton({buttonText, onClick, yDistance = '10%'}){
     );
 }
 
-function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceText, classText, updateClassText}){
+function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceText, classText, updateClassText, godList, updateGodList}){
     
     function AtributeSpinner({atribute, atributeValueList}){
         return(
@@ -52,6 +57,8 @@ function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceT
     }
     
     let textCloseButton = (state === 'firstCreation') ? 'Fechar' : 'Voltar';
+    let ageList = [selectedRace.adultAge];
+    let weightList = [parseInt((selectedRace.minWeight + selectedRace.maxWeight) / 2)];
 
     return(
         <div style={{
@@ -128,8 +135,142 @@ function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceT
                 { ((state === 'fourthCreation') && (sheet instanceof Sheet) && (
                     <div>
                         <h1 style={{fontWeight: 'normal', fontSize: '32px'}}>Características Básicas</h1>
-                        <textarea/>
-                        <textarea/>
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <AtributesDefineText id={'nameText'} width={'250px'}/>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Nome do personagem
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <select id="GoodEvilSelector" style={{marginRight: '10px'}} 
+                                    onChange={() => HandleChangeForGodSelector(document.getElementById('GoodEvilSelector').value, document.getElementById('ChaosLawSelector').value, godList, updateGodList, selectedRace.race)}
+                                >
+                                    {selectedClass.alignments[0].map((alignment, index) => (
+                                        <option key={index} value={alignment}>
+                                            {Translator.alignments(alignment)}
+                                        </option>
+                                    ))}
+                                </select>
+                                <select id="ChaosLawSelector"
+                                    onChange={() => HandleChangeForGodSelector(document.getElementById('GoodEvilSelector').value, document.getElementById('ChaosLawSelector').value, godList, updateGodList, selectedRace.race)}
+                                >
+                                    {selectedClass.alignments[1].map((alignment, index) => (
+                                        <option key={index} value={alignment}>
+                                            {Translator.alignments(alignment)}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Tendência
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <select id={'godSelector'}defaultValue={'none'} >
+                                    <option value={'none'}> Nenhum </option>
+                                    {godList.map((god, index) =>(
+                                        <option key={index} value={god}>
+                                            {god}
+                                        </option>
+                                    ))}    
+                                </select>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Divindade
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                {selectedRace.size}
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Tamanho
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <Spinner valueList={ageList} max={selectedRace.maxAge}/>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Idade
+                                </div>
+                            </div>               
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <select>
+                                    <option value={'male'}> Masculino </option>
+                                    <option value={'female'}> Feminino </option>
+                                </select>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Sexo
+                                </div>
+                            </div>               
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <SpinnerFloat minLimit={selectedRace.minHeight} maxLimit={selectedRace.maxHeight} precision={2}/> 
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Altura
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <Spinner valueList={weightList} min={selectedRace.minWeight} max={selectedRace.maxWeight}/>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Peso
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <AtributesDefineText id={'eyeColorText'} width={'180px'}/>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Cor dos Olhos
+                                </div>
+                            </div>
+                    
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <AtributesDefineText id={'hairText'} width={'180px'}/>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Cabelos
+                                </div>
+                            </div>
+
+                            <div style={{textAlign: 'left', paddingBottom: '8px'}}>
+                                <AtributesDefineText id={'skinText'} width={'180px'}/>
+                                <div style={{
+                                    fontSize: '11px',
+                                    marginTop: '0px'
+                                }}>
+                                    Pele
+                                </div>
+                            </div>
                         <div style={{display: 'block', gap: '10px'}}>
 
                         </div>
@@ -156,9 +297,37 @@ function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceT
 
             case 'thirdCreation':
                 changeState('fourthCreation');
+                HandleChangeForGodSelector(selectedClass.alignments[0][0], selectedClass.alignments[1][0], godList, updateGodList, selectedRace.race);
                 break;
 
             case 'fourthCreation':
+                if(selectedClass.class === 'cleric'){
+                    if(document.getElementById('godSelector').value === 'none'){
+                        alert('Clérigo deve escolher divindade.');
+                        break;
+                    } 
+                }
+
+                if(document.getElementById('nameText').value.toString() === ''){
+                    alert('Nome não preenchido.');
+                    break;
+                }
+
+                if(document.getElementById('eyeColorText').value.toString() === ''){
+                    alert('Cor dos Olhos não preenchido.');
+                    break;
+                }               
+
+                if(document.getElementById('hairText').value.toString() === ''){
+                    alert('Cabelos não preenchido.');
+                    break;
+                }
+
+                if(document.getElementById('skinText').value.toString() === ''){
+                    alert('Pele não preenchido.');
+                    break;
+                }
+
                 changeState('loaded');
                 break;
 
@@ -177,10 +346,14 @@ function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceT
 
             case 'thirdCreation':
                 changeState('secondCreation');
+                selectedRace = new Races('human');
+                updateRaceText(selectedRace.raceTextGenerator());
                 break;
 
             case 'fourthCreation':
                 changeState('thirdCreation');
+                selectedClass = new Classes('barbarian');
+                updateClassText(selectedClass.classTextGenerator());
                 break;
 
         }
@@ -195,6 +368,18 @@ function CreateSheetModalPopup({sheet, state, changeState, raceText, updateRaceT
         selectedClass = new Classes(event.target.value);
         updateClassText(selectedClass.classTextGenerator());
     }    
+
+}
+
+function HandleChangeForGodSelector(goodEvil, chaosLaw, godList, updateGodList, raceName = null){
+    updateGodList(Gods.godListByAlignment([goodEvil, chaosLaw], raceName));
+}
+
+function HandleGoodEvilSelector(){
+
+}
+
+function HandleChosLawSelector(){
 
 }
 
@@ -215,4 +400,10 @@ function HandleCreateSheet(sheet, state, changeState){
     changeState('firstCreation');
 }
 
+function AtributesDefineText({width, id}){
+    return(
+        <textarea className='atributesDefineText' style={{width: width}} id={id} rows={'1'}>
+        </textarea>
+    );
+}
 export default Home;

@@ -6,7 +6,6 @@ class Sheet{
         this.isLoaded = false;
 
         this.race = null;
-        this.class = null;
         this.strength = [10];
         this.dexterity = [10];
         this.constituition = [10];
@@ -14,7 +13,16 @@ class Sheet{
         this.wisdom = [10];
         this.charisma = [10];
 
-        this.class = new Classes('barbarian', this);
+        this.class = [new Classes('barbarian', this)];
+
+    }
+    
+    isMulticlass() {
+        if(this.class.length > 1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 

@@ -10,6 +10,7 @@ class Races{
         this.displacement = null;
         this.adultAge = null;
 
+        // Tamanho definido em centímetros
         this.minHeight = null;
         this.maxHeight = null;
 
@@ -37,8 +38,8 @@ class Races{
 
         switch(race){
             case 'human':
-                this.minHeight = 1.6;
-                this.maxHeight = 1.9;
+                this.minHeight = 160;
+                this.maxHeight = 190;
 
                 this.size = 'M';
                 this.displacement = 9;
@@ -60,8 +61,8 @@ class Races{
             break;
 
             case 'elf':
-                this.minHeight = 1.4;
-                this.maxHeight = 1.72;
+                this.minHeight = 140;
+                this.maxHeight = 172;
     
                 this.constituition = -2;
                 this.dexterity = 2;
@@ -90,8 +91,8 @@ class Races{
             break;
 
             case 'dwarf':
-                this.minHeight = 1.3;
-                this.maxHeight = 1.5;
+                this.minHeight = 130;
+                this.maxHeight = 150;
     
                 this.constituition = 2;
                 this.charisma = -2;
@@ -122,8 +123,8 @@ class Races{
             break;
 
             case 'gnome':
-                this.minHeight = 1;
-                this.maxHeight = 1.2;
+                this.minHeight = 100;
+                this.maxHeight = 120;
     
                 this.constituition = 2;
                 this.strength = -2;
@@ -155,8 +156,8 @@ class Races{
             break;
 
             case 'halfling':
-                this.minHeight = 0.7;
-                this.maxHeight = 0.95;
+                this.minHeight = 70;
+                this.maxHeight = 95;
                 
                 this.strength = -2;
                 this.dexterity = 2;
@@ -185,8 +186,8 @@ class Races{
             break;
 
             case 'halforc':
-                this.minHeight = 1.8;
-                this.maxHeight = 2.1;
+                this.minHeight = 180;
+                this.maxHeight = 210;
                 
                 this.strength = 2;
                 this.intelligence = -2;
@@ -211,8 +212,8 @@ class Races{
             break;
             
             case 'halfelf':
-                this.minHeight = 1.5;
-                this.maxHeight = 1.8;
+                this.minHeight = 150;
+                this.maxHeight = 180;
     
                 this.size = 'M';
                 this.displacement = 9;

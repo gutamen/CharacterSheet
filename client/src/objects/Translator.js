@@ -1,3 +1,6 @@
+import { configure } from "@testing-library/dom";
+import { type } from "@testing-library/user-event/dist/type";
+
 function weapons(weapon){
     switch(weapon){
         case 'simple':
@@ -30,7 +33,25 @@ function armors(armor){
 }
 
 function alignments(alignment){
+    
+//    console.log(typeof alignment);
+    if(typeof alignment === 'string'){
+        switch(alignment){
+            case 'good':
+                return 'Bom';
+            case 'neutral':
+                return 'Neutro';
+            case 'evil':
+                return 'Mal';
+            case 'law':
+                return 'Leal';
+            case 'chaotic':
+                return 'Caótico';
 
+            default:
+                return 'Sem Tradução';
+        }
+    }
 }
 
 function skills(skill){
@@ -135,4 +156,4 @@ function skills(skill){
     }
 }
 
-export default {skills, armors, weapons};
+export default {skills, armors, weapons, alignments};

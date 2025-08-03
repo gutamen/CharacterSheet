@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
-function Spinner({valueList}) {
+function Spinner({valueList, min = 1, max = 20}) {
 
-    const [value, setValue] = useState(10);
+    const [value, setValue] = useState(valueList[0]);
 
     const inc = () => {
-        let next = Math.min(value + 1, 20);
-        setValue(next); // máximo 20
+        let next = Math.min(value + 1, max);
+        setValue(next); 
         valueList[0] = next;
     };
 
     const dec = () => {
-        let next = Math.max(value - 1, 1);
-        setValue(next); // mínimo 1
+        let next = Math.max(value - 1, min);
+        setValue(next); 
         valueList[0] = next;
     };
     

@@ -146,7 +146,6 @@ class Classes{
 //        this.level = 1;
         this.weapons = [];
         this.armor = [];
-        this.godhood = null;
 
         switch(className){
             case 'barbarian':

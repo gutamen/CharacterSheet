@@ -40,6 +40,16 @@
     margin-bottom: 0px;
 }
 
+.atributesDefineText{
+    border: none;
+    border-bottom: 2px solid #000;
+    outline: none;
+    resize: none;
+    font-size: 13px;
+    padding: 4px;
+    margin-bottom: 0px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
